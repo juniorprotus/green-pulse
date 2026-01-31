@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenPulse Admin | Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fa-solid fa-leaf"></i> GreenPulse
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="active"><i class="fa-solid fa-chart-pie"></i> Dashboard</a>
+                <a href="#"><i class="fa-solid fa-clipboard-list"></i> Reports</a>
+                <a href="#"><i class="fa-solid fa-calendar-days"></i> Schedules</a>
+                <a href="#"><i class="fa-solid fa-users"></i> Users</a>
+                <a href="#"><i class="fa-solid fa-gear"></i> Settings</a>
+            </nav>
+            <div class="sidebar-footer">
+                <button class="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <header class="admin-header">
+                <h2>Dashboard Overview</h2>
+                <div class="header-actions">
+                    <button class="btn-icon"><i class="fa-solid fa-bell"></i></button>
+                    <div class="profile-pic">AD</div>
+                </div>
+            </header>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-icon warning"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <div>
+                        <h3>12</h3>
+                        <p>Pending Reports</p>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon info"><i class="fa-solid fa-spinner"></i></div>
+                    <div>
+                        <h3>5</h3>
+                        <p>In Progress</p>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon success"><i class="fa-solid fa-circle-check"></i></div>
+                    <div>
+                        <h3>128</h3>
+                        <p>Resolved (Month)</p>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon primary"><i class="fa-solid fa-users"></i></div>
+                    <div>
+                        <h3>450</h3>
+                        <p>Active Citizens</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Reports and Map -->
+            <div class="dashboard-split">
+                <div class="recent-reports">
+                    <div class="card-header">
+                        <h3>Recent Reports</h3>
+                        <button class="btn-text">View All</button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Type</th>
+                                <th>Location</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#GP-1024</td>
+                                <td><span class="type-badge"><i class="fa-solid fa-trash" style="color:#ef4444;"></i>
+                                        Overflow</span>
+                                </td>
+                                <td>124 Main St.</td>
+                                <td><span class="status-badge pending">Pending</span></td>
+                                <td><button class="btn-sm">View</button></td>
+                            </tr>
+                            <tr>
+                                <td>#GP-1023</td>
+                                <td><span class="type-badge"><i class="fa-solid fa-ban" style="color:#f59e0b;"></i>
+                                        Dumping</span></td>
+                                <td>Central Park</td>
+                                <td><span class="status-badge progress">In Progress</span></td>
+                                <td><button class="btn-sm">View</button></td>
+                            </tr>
+                            <tr>
+                                <td>#GP-1022</td>
+                                <td><span class="type-badge"><i class="fa-solid fa-clock" style="color:#3b82f6;"></i>
+                                        Missed</span></td>
+                                <td>Oak Ave 12</td>
+                                <td><span class="status-badge resolved">Resolved</span></td>
+                                <td><button class="btn-sm">View</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="live-map">
+                    <div class="card-header">
+                        <h3>Live Map</h3>
+                    </div>
+                    <div class="map-placeholder">
+                        <i class="fa-solid fa-map-location-dot map-icon"></i>
+                        <p>Interactive Map Module</p>
+                        <small style="opacity: 0.6">Waiting for API Integration</small>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="../config.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

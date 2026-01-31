@@ -1,0 +1,39 @@
+GreenPulse - Smart Waste Management System
+
+
+About
+GreenPulse is a smart waste management system designed to
+help citizens and municipalities manage waste collection 
+efficiently. Citizens can report waste issues,
+view collection schedules, and receive waste management tips.
+Administrators can manage reports,
+create collection schedules, and view statistics.
+
+Phase 1: Planning
+* �Create implementation plan
+* �Get user approval on plan
+Phase 2: Backend Setup
+* �Initialize Node.js/Express server
+* �Set up MySQL database connection
+* �Create database models (User, Report, Schedule)
+* �Implement authentication (JWT)
+* �Create API routes for reports
+* �Create API routes for schedules
+* �Add email notification service
+Phase 3: Frontend - Citizen Portal
+* Update client with API integration
+* �Add GPS/Maps for location picking
+* �Implement user registration/login
+* �Add report status tracking view
+Phase 4: Admin Dashboard
+* Create admin login page
+* Build reports management dashboard
+* Add status update functionality
+* Display analytics/stats
+Phase 5: Deployment
+* Frontend deployment to infinityfree hosting
+* Deploy backend to infinityfree hosting
+* Test full system
+
+
+

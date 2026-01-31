@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenPulse | Smart Waste Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="background-shapes"></div>
+
+    <nav class="nav-container">
+        <div class="nav-content">
+            <div class="logo">
+                <i class="fa-solid fa-leaf"></i> GreenPulse
+            </div>
+            <div class="nav-links">
+                <a href="#home" class="active">Home</a>
+                <a href="#report">Report</a>
+                <a href="#schedule">Schedule</a>
+                <a href="#education">Tips</a>
+            </div>
+            <div class="auth-buttons">
+                <button class="btn btn-secondary" onclick="openLoginModal()">Login</button>
+                <button class="btn btn-primary" onclick="openSignupModal()">Get Started</button>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section id="home" class="hero-section">
+            <div class="hero-content">
+                <h1>Keep Your City <br><span class="highlight">Clean & Green</span></h1>
+                <p>Join the revolution in smart waste management. Report issues in seconds, track collections in
+                    real-time, and contribute to a sustainable future.</p>
+                <div class="hero-cta">
+                    <button class="btn btn-primary" onclick="scrollToReport()">Report Issue <i
+                            class="fa-solid fa-arrow-right"></i></button>
+                    <button class="btn btn-secondary" onclick="scrollToSchedule()">Check Schedule</button>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <img src="https://placehold.co/400x300/e2e8f0/1e293b?text=Green+City" alt="City Illustration"
+                    style="border-radius: 20px; opacity: 0.1; position: absolute;">
+
+                <div class="stat-card top-right">
+                    <div class="icon-box info"><i class="fa-solid fa-trash-can"></i></div>
+                    <div>
+                        <h3>98%</h3>
+                        <p>Collection Rate</p>
+                    </div>
+                </div>
+                <div class="stat-card bottom-left">
+                    <div class="icon-box success"><i class="fa-solid fa-clock"></i></div>
+                    <div>
+                        <h3>24h</h3>
+                        <p>Avg Response</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="report" class="report-section">
+            <div class="section-content">
+                <div class="section-header">
+                    <h2>Report an Issue</h2>
+                    <p>Spotted overflowing bins or illegal dumping? Let us know.</p>
+                </div>
+
+                <div class="form-container">
+                    <form id="reportForm">
+                        <div class="form-group">
+                            <label for="reportType">Issue Type</label>
+                            <select id="reportType" required>
+                                <option value="" disabled selected>Select issue type...</option>
+                                <option value="overflow">Overflowing Bin</option>
+                                <option value="dumping">Illegal Dumping</option>
+                                <option value="missed">Missed Collection</option>
+                                <option value="damage">Damaged Bin</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="location">Location</label>
+                            <div class="input-with-icon">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <input type="text" id="location" placeholder="Detecting location..." readonly>
+                                <button type="button" class="btn-icon-inside" onclick="getLocation()"><i
+                                        class="fa-solid fa-crosshairs"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description">Description (Optional)</label>
+                            <textarea id="description" rows="3" placeholder="Provide more details..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="file-upload-label">
+                                <input type="file" id="imageProof" accept="image/*" hidden>
+                                <div class="upload-area">
+                                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                                    <span>Click to upload photo evidence</span>
+                                </div>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary full-width">Submit Report</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <section id="schedule" class="hero-section" style="min-height: auto; padding: 5rem 2rem; background: #fff;">
+            <div class="section-content" style="text-align: center;">
+                <div class="section-header">
+                    <h2>Collection Schedule</h2>
+                    <p>Find out when we collect waste in your area.</p>
+                </div>
+                <div class="card" style="padding: 2rem; max-width: 600px; margin: 0 auto;">
+                    <p style="color: var(--text-muted); margin-bottom: 1rem;"><i class="fa-solid fa-calendar-days"
+                            style="color: var(--primary); font-size: 2rem; margin-bottom: 0.5rem; display: block;"></i>
+                        Select your area to view the schedule.</p>
+                    <select class="form-control"
+                        style="width: 100%; padding: 0.8rem; margin-bottom: 1rem; border: 1px solid var(--border-light); border-radius: 8px;">
+                        <option>Downtown</option>
+                        <option>West Side</option>
+                        <option>North Hills</option>
+                    </select>
+                    <button class="btn btn-primary full-width">View Schedule</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="education" class="hero-section" style="min-height: auto; padding: 5rem 2rem;">
+            <div class="section-content text-center" style="max-width: 1000px;">
+                <div class="section-header">
+                    <h2>Eco Tips & Education</h2>
+                    <p>Learn how to recycle better and reduce waste.</p>
+                </div>
+                <div class="stats-grid"
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                    <div class="card" style="padding: 2rem; text-align: left;">
+                        <div class="icon-box success" style="margin-bottom: 1rem;"><i class="fa-solid fa-recycle"></i>
+                        </div>
+                        <h3 style="margin-bottom: 0.5rem; font-size: 1.2rem;">Recycling 101</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Separate paper, plastic, and glass.
+                            rinse containers before binning them.</p>
+                    </div>
+                    <div class="card" style="padding: 2rem; text-align: left;">
+                        <div class="icon-box warning" style="margin-bottom: 1rem; background: #FFF7ED; color: #EA580C;">
+                            <i class="fa-solid fa-ban"></i>
+                        </div>
+                        <h3 style="margin-bottom: 0.5rem; font-size: 1.2rem;">Hazardous Waste</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Batteries and electronics should never
+                            go in general waste bins.</p>
+                    </div>
+                    <div class="card" style="padding: 2rem; text-align: left;">
+                        <div class="icon-box info" style="margin-bottom: 1rem;"><i class="fa-solid fa-seedling"></i>
+                        </div>
+                        <h3 style="margin-bottom: 0.5rem; font-size: 1.2rem;">Composting</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Turn organic kitchen scraps into
+                            nutrient-rich soil for your garden.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modals -->
+    <div id="authModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeAuthModal()"><i class="fa-solid fa-xmark"></i></button>
+            <h2 id="modalTitle" style="margin-bottom: 1.5rem;">Welcome Back</h2>
+            <form id="authForm">
+                <div class="form-group hidden" id="nameGroup">
+                    <label>Full Name</label>
+                    <input type="text" id="nameInput" placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" placeholder="name@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn btn-primary full-width">Login</button>
+            </form>
+            <p style="text-align: center; margin-top: 1.5rem; color: var(--text-muted); font-size: 0.9rem;">
+                Don't have an account? <a href="#"
+                    style="color: var(--primary); font-weight: 600; text-decoration: none;">Sign up</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
