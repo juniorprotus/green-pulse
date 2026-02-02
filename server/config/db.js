@@ -1,90 +1,88 @@
-const mysql = require('mysql2/promise');
+// server/config/db.js
 
-const dbConfig = {
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || 'greenpulse',
-    port: process.env.DB_PORT || 3306,
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0,
-    acquireTimeout: 60000,
-    timeout: 60000,
-    reconnect: true
-};
+const mysql = require("mysql2/promise");
 
-let connection;
+let pool;
 
 const connectDB = async () => {
-    try {
-        connection = mysql.createPool(dbConfig);
-        
-        // Test the connection
-        const testConnection = await connection.getConnection();
-        testConnection.release();
-        console.log('MySQL Database connected successfully');
-        
-        // Create tables if they don't exist
-        await createTables();
-        
-    } catch (err) {
-        console.error('Database connection failed:', err.message);
-        process.exit(1);
+  try {
+    if (!process.env.DATABASE_URL) {
+      throw new Error("DATABASE_URL is not defined in environment variables");
     }
+
+    // Create MySQL connection pool using full URL
+    pool = mysql.createPool(process.env.DATABASE_URL);
+
+    // Test the connection
+    const connection = await pool.getConnection();
+    connection.release();
+
+    console.log("✅ MySQL database connected successfully");
+
+    // Initialize tables
+    await createTables();
+  } catch (error) {
+    console.error("❌ Database connection failed:", error.message);
+    process.exit(1);
+  }
 };
 
 const createTables = async () => {
-    try {
-        // Create Users table
-        await connection.execute(`
-            CREATE TABLE IF NOT EXISTS users (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                name VARCHAR(100) NOT NULL,
-                email VARCHAR(100) UNIQUE NOT NULL,
-                password VARCHAR(255) NOT NULL,
-                role ENUM('citizen', 'admin') DEFAULT 'citizen',
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-            )
-        `);
+  try {
+    await pool.execute(`
+      CREATE TABLE IF NOT EXISTS users (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(100) NOT NULL,
+        email VARCHAR(100) UNIQUE NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        role ENUM('citizen', 'admin') DEFAULT 'citizen',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+      )
+    `);
 
-        // Create Reports table
-        await connection.execute(`
-            CREATE TABLE IF NOT EXISTS reports (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                user_id INT NOT NULL,
-                type ENUM('overflow', 'dumping', 'missed', 'damage', 'other') NOT NULL,
-                location VARCHAR(255) NOT NULL,
-                description TEXT,
-                image_url VARCHAR(500),
-                status ENUM('pending', 'in-progress', 'resolved') DEFAULT 'pending',
-                admin_response TEXT,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-            )
-        `);
+    await pool.execute(`
+      CREATE TABLE IF NOT EXISTS reports (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        user_id INT NOT NULL,
+        type ENUM('overflow', 'dumping', 'missed', 'damage', 'other') NOT NULL,
+        location VARCHAR(255) NOT NULL,
+        description TEXT,
+        image_url VARCHAR(500),
+        status ENUM('pending', 'in-progress', 'resolved') DEFAULT 'pending',
+        admin_response TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+      )
+    `);
 
-        // Create Schedules table
-        await connection.execute(`
-            CREATE TABLE IF NOT EXISTS schedules (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                area VARCHAR(100) NOT NULL,
-                day_of_week ENUM('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday') NOT NULL,
-                time VARCHAR(20) NOT NULL,
-                waste_type ENUM('General', 'Recyclable', 'Hazardous', 'Organic') DEFAULT 'General',
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-            )
-        `);
+    await pool.execute(`
+      CREATE TABLE IF NOT EXISTS schedules (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        area VARCHAR(100) NOT NULL,
+        day_of_week ENUM(
+          'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'
+        ) NOT NULL,
+        time VARCHAR(20) NOT NULL,
+        waste_type ENUM(
+          'General','Recyclable','Hazardous','Organic'
+        ) DEFAULT 'General',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+      )
+    `);
 
-        console.log('Database tables created successfully');
-    } catch (err) {
-        console.error('Error creating tables:', err.message);
-    }
+    console.log("✅ Database tables ready");
+  } catch (error) {
+    console.error("❌ Error creating tables:", error.message);
+    process.exit(1);
+  }
 };
 
-const getConnection = () => connection;
+const getDB = () => pool;
 
-module.exports = { connectDB, getConnection };
+module.exports = {
+  connectDB,
+  getDB,
+};
