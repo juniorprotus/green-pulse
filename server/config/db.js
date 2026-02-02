@@ -1,5 +1,3 @@
-// server/config/db.js
-
 const mysql = require("mysql2/promise");
 
 let pool;
@@ -7,19 +5,18 @@ let pool;
 const connectDB = async () => {
   try {
     if (!process.env.DATABASE_URL) {
-      throw new Error("DATABASE_URL is not defined in environment variables");
+      throw new Error("DATABASE_URL is not defined");
     }
 
-    // Create MySQL connection pool using full URL
+    // Create pool using full DATABASE_URL
     pool = mysql.createPool(process.env.DATABASE_URL);
 
-    // Test the connection
-    const connection = await pool.getConnection();
-    connection.release();
+    // Test connection
+    const conn = await pool.getConnection();
+    conn.release();
 
     console.log("✅ MySQL database connected successfully");
 
-    // Initialize tables
     await createTables();
   } catch (error) {
     console.error("❌ Database connection failed:", error.message);
@@ -35,7 +32,7 @@ const createTables = async () => {
         name VARCHAR(100) NOT NULL,
         email VARCHAR(100) UNIQUE NOT NULL,
         password VARCHAR(255) NOT NULL,
-        role ENUM('citizen', 'admin') DEFAULT 'citizen',
+        role ENUM('citizen','admin') DEFAULT 'citizen',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
       )
@@ -45,11 +42,11 @@ const createTables = async () => {
       CREATE TABLE IF NOT EXISTS reports (
         id INT AUTO_INCREMENT PRIMARY KEY,
         user_id INT NOT NULL,
-        type ENUM('overflow', 'dumping', 'missed', 'damage', 'other') NOT NULL,
+        type ENUM('overflow','dumping','missed','damage','other') NOT NULL,
         location VARCHAR(255) NOT NULL,
         description TEXT,
         image_url VARCHAR(500),
-        status ENUM('pending', 'in-progress', 'resolved') DEFAULT 'pending',
+        status ENUM('pending','in-progress','resolved') DEFAULT 'pending',
         admin_response TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -61,28 +58,21 @@ const createTables = async () => {
       CREATE TABLE IF NOT EXISTS schedules (
         id INT AUTO_INCREMENT PRIMARY KEY,
         area VARCHAR(100) NOT NULL,
-        day_of_week ENUM(
-          'Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'
-        ) NOT NULL,
+        day_of_week ENUM('Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday') NOT NULL,
         time VARCHAR(20) NOT NULL,
-        waste_type ENUM(
-          'General','Recyclable','Hazardous','Organic'
-        ) DEFAULT 'General',
+        waste_type ENUM('General','Recyclable','Hazardous','Organic') DEFAULT 'General',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
       )
     `);
 
     console.log("✅ Database tables ready");
-  } catch (error) {
-    console.error("❌ Error creating tables:", error.message);
+  } catch (err) {
+    console.error("❌ Error creating tables:", err.message);
     process.exit(1);
   }
 };
 
 const getDB = () => pool;
 
-module.exports = {
-  connectDB,
-  getDB,
-};
+module.exports = { connectDB, getDB };
