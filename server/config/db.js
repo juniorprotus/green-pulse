@@ -5,9 +5,13 @@ const dbConfig = {
     user: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || '',
     database: process.env.DB_NAME || 'greenpulse',
+    port: process.env.DB_PORT || 3306,
     waitForConnections: true,
     connectionLimit: 10,
-    queueLimit: 0
+    queueLimit: 0,
+    acquireTimeout: 60000,
+    timeout: 60000,
+    reconnect: true
 };
 
 let connection;
@@ -17,7 +21,8 @@ const connectDB = async () => {
         connection = mysql.createPool(dbConfig);
         
         // Test the connection
-        await connection.getConnection();
+        const testConnection = await connection.getConnection();
+        testConnection.release();
         console.log('MySQL Database connected successfully');
         
         // Create tables if they don't exist
