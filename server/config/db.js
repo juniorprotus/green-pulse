@@ -5,10 +5,10 @@ let pool;
 const connectDB = async () => {
   try {
     if (!process.env.DATABASE_URL) {
-      throw new Error("DATABASE_URL is not defined");
+      throw new Error("DATABASE_URL is not defined in your environment variables");
     }
 
-    // Create MySQL pool using full URL
+    // Create a connection pool using DATABASE_URL from .env
     pool = mysql.createPool({
       uri: process.env.DATABASE_URL,
       waitForConnections: true,
@@ -18,7 +18,6 @@ const connectDB = async () => {
     // Test the connection
     const conn = await pool.getConnection();
     conn.release();
-
     console.log("✅ MySQL database connected successfully");
 
     // Create tables if they don't exist
@@ -31,6 +30,7 @@ const connectDB = async () => {
 
 const createTables = async () => {
   try {
+    // Users table
     await pool.execute(`
       CREATE TABLE IF NOT EXISTS users (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -43,6 +43,7 @@ const createTables = async () => {
       )
     `);
 
+    // Reports table
     await pool.execute(`
       CREATE TABLE IF NOT EXISTS reports (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -59,6 +60,7 @@ const createTables = async () => {
       )
     `);
 
+    // Schedules table
     await pool.execute(`
       CREATE TABLE IF NOT EXISTS schedules (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -71,13 +73,14 @@ const createTables = async () => {
       )
     `);
 
-    console.log("✅ Database tables ready");
+    console.log("✅ Database tables are ready");
   } catch (err) {
     console.error("❌ Error creating tables:", err.message);
     process.exit(1);
   }
 };
 
+// Getter for the pool
 const getDB = () => pool;
 
 module.exports = { connectDB, getDB };
