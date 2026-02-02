@@ -8,18 +8,23 @@ const connectDB = async () => {
       throw new Error("DATABASE_URL is not defined");
     }
 
-    // Create pool using full DATABASE_URL
-    pool = mysql.createPool(process.env.DATABASE_URL);
+    // Create MySQL pool using full URL
+    pool = mysql.createPool({
+      uri: process.env.DATABASE_URL,
+      waitForConnections: true,
+      connectionLimit: 10,
+    });
 
-    // Test connection
+    // Test the connection
     const conn = await pool.getConnection();
     conn.release();
 
     console.log("✅ MySQL database connected successfully");
 
+    // Create tables if they don't exist
     await createTables();
-  } catch (error) {
-    console.error("❌ Database connection failed:", error.message);
+  } catch (err) {
+    console.error("❌ Database connection failed:", err.message);
     process.exit(1);
   }
 };

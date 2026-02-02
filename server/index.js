@@ -13,14 +13,14 @@ app.get("/", (req, res) => {
   res.send("GreenPulse API is running...");
 });
 
-// Routes
+// API routes
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/reports", require("./routes/reports"));
 app.use("/api/schedules", require("./routes/schedules"));
 
 const PORT = process.env.PORT || 10000;
 
-// Start server after DB is connected
+// Start server after DB connection
 const startServer = async () => {
   await connectDB();
 
