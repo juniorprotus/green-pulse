@@ -1,5 +1,3 @@
-// server/index.js
-
 const express = require("express");
 const cors = require("cors");
 const { connectDB } = require("./config/db");
@@ -22,7 +20,7 @@ app.use("/api/schedules", require("./routes/schedules"));
 
 const PORT = process.env.PORT || 10000;
 
-// Start server after DB connection
+// Start server after DB is connected
 const startServer = async () => {
   await connectDB();
 
